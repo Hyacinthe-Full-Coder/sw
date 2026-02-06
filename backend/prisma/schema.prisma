@@ -57,12 +57,11 @@ model Professor {
 }
 
 model Responsible {
-  id         String   @id @default(cuid())
-  userId     String   @unique
-  formationId String
-  
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  formation  Formation @relation(fields: [formationId], references: [id])
+  id          String    @id @default(cuid())
+  userId      String    @unique
+  user        User      @relation(fields: [userId], references: [id])
+  formationId String    @unique  //! Ajoute @unique
+  formation   Formation @relation(fields: [formationId], references: [id])
 }
 
 model Department {
