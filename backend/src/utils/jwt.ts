@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import { JWTPayload } from '../types';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_key_very_long_and_secure';
@@ -9,18 +9,20 @@ const REFRESH_EXPIRES_IN = process.env.REFRESH_EXPIRES_IN || '7d';
 export class JWTService {
   // Générer un token d'accès
   static generateAccessToken(payload: JWTPayload): string {
-    return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+    const options: SignOptions = { expiresIn: JWT_EXPIRES_IN as any };
+    return jwt.sign(payload, JWT_SECRET as string, options);
   }
 
   // Générer un token de rafraîchissement
   static generateRefreshToken(payload: JWTPayload): string {
-    return jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: REFRESH_EXPIRES_IN });
+    const options: SignOptions = { expiresIn: REFRESH_EXPIRES_IN as any };
+    return jwt.sign(payload, JWT_REFRESH_SECRET as string, options);
   }
 
   // Vérifier un token d'accès
   static verifyAccessToken(token: string): JWTPayload | null {
     try {
-      return jwt.verify(token, JWT_SECRET) as JWTPayload;
+      return jwt.verify(token, JWT_SECRET as string) as JWTPayload;
     } catch (error) {
       return null;
     }
@@ -29,7 +31,7 @@ export class JWTService {
   // Vérifier un token de rafraîchissement
   static verifyRefreshToken(token: string): JWTPayload | null {
     try {
-      return jwt.verify(token, JWT_REFRESH_SECRET) as JWTPayload;
+      return jwt.verify(token, JWT_REFRESH_SECRET as string) as JWTPayload;
     } catch (error) {
       return null;
     }
